@@ -1,0 +1,30 @@
+{
+  "name": "threejs-galaxy",
+  "version": "1.0.0",
+  "description": "Practice project for learning more about three.js",
+  "main": "dist/index.js",
+  "dependencies": {
+    "core-js": "^3.14.0",
+    "regenerator-runtime": "^0.13.7",
+    "three": "^0.129.0",
+    "typescript": "^4.3.2"
+  },
+  "scripts": {
+    "start": "parcel src/index.html",
+    "clean": "rimraf dist/*",
+    "build:parcel": "parcel build src/index.html",
+    "build": "npm-run-all clean build:parcel"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/dat.gui": "^0.7.7",
+    "@types/three": "^0.129.1",
+    "dat.gui": "^0.7.7",
+    "gsap": "^3.7.1",
+    "minimist": "^1.2.5",
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.5",
+    "rimraf": "^3.0.2"
+  }
+}
