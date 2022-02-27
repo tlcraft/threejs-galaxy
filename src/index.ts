@@ -1,20 +1,24 @@
 import { 
-  AmbientLight,
-  AxesHelper,
-  BufferGeometry,
-  Clock,
-  Light,
-  Material,
-  Mesh,
-  MeshBasicMaterial,
-  MeshLambertMaterial,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  RepeatWrapping,
-  Scene,
-  Texture,
-  TextureLoader,
-  WebGLRenderer
+    AdditiveBlending,
+    AmbientLight,
+    AxesHelper,
+    BufferAttribute,
+    BufferGeometry,
+    Clock,
+    Light,
+    Material,
+    Mesh,
+    MeshBasicMaterial,
+    MeshLambertMaterial,
+    PCFSoftShadowMap,
+    PerspectiveCamera,
+    Points,
+    PointsMaterial,
+    RepeatWrapping,
+    Scene,
+    Texture,
+    TextureLoader,
+    WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as dat from 'dat.gui';
@@ -48,6 +52,13 @@ function startup(): void {
 
     const ambientLight = new AmbientLight( "#b9d5ff", 0.2 );
     scene.add(ambientLight);
+
+    const params = {
+        count: 1000,
+        size: 0.02
+    }
+    const galaxy = generateGalaxy(params);
+    scene.add(galaxy);
 
     const animate = function () {
         requestAnimationFrame(animate);
@@ -162,6 +173,32 @@ function generateRenderer(): WebGLRenderer {
     renderer.setClearColor("#262837");
 
     return renderer;
+}
+
+function generateGalaxy(parameters: { count: number, size: number}): Points {
+    const { count, size } = parameters;
+    const geometry = new BufferGeometry();
+    const positions = new Float32Array(count * 3);
+
+    for(let i = 0; i < count; i++) {
+        const pointIndex = i * 3;
+        positions[pointIndex] = Math.random();
+        positions[pointIndex+1] = Math.random();
+        positions[pointIndex+2] = Math.random();
+    }
+
+    geometry.addAttribute('position', new BufferAttribute(positions, 3));
+
+   const material = new PointsMaterial({
+       size: size,
+       sizeAttenuation: true,
+       depthWrite: false,
+       blending: AdditiveBlending
+   });
+
+   const points = new Points(geometry, material);
+   return points;
+
 }
 
 function generateControls(): OrbitControls {
