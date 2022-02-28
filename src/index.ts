@@ -69,6 +69,8 @@ function startup(): void {
         renderer.render(scene, camera);
     };
 
+    debugGui.add(params, 'count').min(100).max(100000).step(100).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
+    debugGui.add(params, 'size').min(0.01).max(0.8).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     configureLightDebug(ambientLight, 'ambient light');
     animate();
 }
@@ -182,9 +184,9 @@ function generateGalaxy(parameters: { count: number, size: number}): Points {
 
     for(let i = 0; i < count; i++) {
         const pointIndex = i * 3;
-        positions[pointIndex] = Math.random();
-        positions[pointIndex+1] = Math.random();
-        positions[pointIndex+2] = Math.random();
+        positions[pointIndex] = (Math.random() - 0.5) * 4;
+        positions[pointIndex+1] = (Math.random() - 0.5) * 4;
+        positions[pointIndex+2] = (Math.random() - 0.5) * 4;
     }
 
     geometry.addAttribute('position', new BufferAttribute(positions, 3));
