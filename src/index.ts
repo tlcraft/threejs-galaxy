@@ -33,6 +33,10 @@ const camera = generatePerspectivCamera();
 const renderer = generateRenderer();
 const textureLoader = new TextureLoader();
 
+let galaxyGeometry: BufferGeometry = new BufferGeometry();
+let galaxyMaterial: PointsMaterial = new PointsMaterial();
+let galaxyPoints: Points = new Points();
+
 function configureTexture(textureImage: string): Texture {
     const texture = textureLoader.load(textureImage);
     texture.repeat.set(8, 8);
@@ -178,8 +182,12 @@ function generateRenderer(): WebGLRenderer {
 }
 
 function generateGalaxy(parameters: { count: number, size: number}): Points {
+    galaxyGeometry.dispose();
+    galaxyMaterial.dispose();
+    scene.remove(galaxyPoints);
+
     const { count, size } = parameters;
-    const geometry = new BufferGeometry();
+    galaxyGeometry = new BufferGeometry();
     const positions = new Float32Array(count * 3);
 
     for(let i = 0; i < count; i++) {
@@ -189,17 +197,17 @@ function generateGalaxy(parameters: { count: number, size: number}): Points {
         positions[pointIndex+2] = (Math.random() - 0.5) * 4;
     }
 
-    geometry.addAttribute('position', new BufferAttribute(positions, 3));
+    galaxyGeometry.addAttribute('position', new BufferAttribute(positions, 3));
 
-   const material = new PointsMaterial({
+    galaxyMaterial = new PointsMaterial({
        size: size,
        sizeAttenuation: true,
        depthWrite: false,
        blending: AdditiveBlending
    });
 
-   const points = new Points(geometry, material);
-   return points;
+   galaxyPoints = new Points(galaxyGeometry, galaxyMaterial);
+   return galaxyPoints;
 
 }
 
