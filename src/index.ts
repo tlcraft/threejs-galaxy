@@ -59,7 +59,8 @@ function startup(): void {
 
     const params = {
         count: 1000,
-        size: 0.02
+        size: 0.02,
+        radius: 5
     }
     const galaxy = generateGalaxy(params);
     scene.add(galaxy);
@@ -75,6 +76,7 @@ function startup(): void {
 
     debugGui.add(params, 'count').min(100).max(100000).step(100).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'size').min(0.01).max(0.8).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
+    debugGui.add(params, 'radius').min(0.01).max(20).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     configureLightDebug(ambientLight, 'ambient light');
     animate();
 }
