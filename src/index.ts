@@ -183,7 +183,7 @@ function generateRenderer(): WebGLRenderer {
     return renderer;
 }
 
-function generateGalaxy(parameters: { count: number, size: number}): Points {
+function generateGalaxy(parameters: { count: number, size: number, radius: number }): Points {
     galaxyGeometry.dispose();
     galaxyMaterial.dispose();
     scene.remove(galaxyPoints);
@@ -194,9 +194,10 @@ function generateGalaxy(parameters: { count: number, size: number}): Points {
 
     for(let i = 0; i < count; i++) {
         const pointIndex = i * 3;
-        positions[pointIndex] = (Math.random() - 0.5) * 4;
-        positions[pointIndex+1] = (Math.random() - 0.5) * 4;
-        positions[pointIndex+2] = (Math.random() - 0.5) * 4;
+        const radius = Math.random() * parameters.radius;
+        positions[pointIndex] = radius;
+        positions[pointIndex+1] = 0;
+        positions[pointIndex+2] = 0;
     }
 
     galaxyGeometry.addAttribute('position', new BufferAttribute(positions, 3));
