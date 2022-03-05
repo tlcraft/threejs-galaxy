@@ -58,9 +58,10 @@ function startup(): void {
     scene.add(ambientLight);
 
     const params = {
+        branches: 3,
         count: 1000,
+        radius: 5,
         size: 0.02,
-        radius: 5
     }
     const galaxy = generateGalaxy(params);
     scene.add(galaxy);
@@ -74,9 +75,10 @@ function startup(): void {
         renderer.render(scene, camera);
     };
 
+    debugGui.add(params, 'branches').min(2).max(8).step(1).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'count').min(100).max(100000).step(100).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
-    debugGui.add(params, 'size').min(0.01).max(0.8).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'radius').min(0.01).max(20).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
+    debugGui.add(params, 'size').min(0.01).max(0.8).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     configureLightDebug(ambientLight, 'ambient light');
     animate();
 }
@@ -183,21 +185,23 @@ function generateRenderer(): WebGLRenderer {
     return renderer;
 }
 
-function generateGalaxy(parameters: { count: number, size: number, radius: number }): Points {
+function generateGalaxy(parameters: { branches: number, count: number, radius: number, size: number }): Points {
     galaxyGeometry.dispose();
     galaxyMaterial.dispose();
     scene.remove(galaxyPoints);
 
-    const { count, size } = parameters;
+    const { branches, count, size } = parameters;
     galaxyGeometry = new BufferGeometry();
     const positions = new Float32Array(count * 3);
 
     for(let i = 0; i < count; i++) {
         const pointIndex = i * 3;
         const radius = Math.random() * parameters.radius;
-        positions[pointIndex] = radius;
-        positions[pointIndex+1] = 0;
-        positions[pointIndex+2] = 0;
+        const branchAngle = (i % branches) / branches * Math.PI * 2;
+
+        positions[pointIndex] = Math.cos(branchAngle) * radius;
+        positions[pointIndex+1] = Math.sin(i) * 0.5;
+        positions[pointIndex+2] = Math.sin(branchAngle) * radius;
     }
 
     galaxyGeometry.addAttribute('position', new BufferAttribute(positions, 3));
