@@ -187,12 +187,12 @@ function generateRenderer(): WebGLRenderer {
     return renderer;
 }
 
-function generateGalaxy(parameters: { branches: number, count: number, radius: number, size: number }): Points {
+function generateGalaxy(parameters: { branches: number, count: number, radius: number, size: number, spin: number }): Points {
     galaxyGeometry.dispose();
     galaxyMaterial.dispose();
     scene.remove(galaxyPoints);
 
-    const { branches, count, size } = parameters;
+    const { branches, count, size, spin } = parameters;
     galaxyGeometry = new BufferGeometry();
     const positions = new Float32Array(count * 3);
 
@@ -200,10 +200,11 @@ function generateGalaxy(parameters: { branches: number, count: number, radius: n
         const pointIndex = i * 3;
         const radius = Math.random() * parameters.radius;
         const branchAngle = (i % branches) / branches * Math.PI * 2;
+        const spinAngle = radius * spin;
 
-        positions[pointIndex] = Math.cos(branchAngle) * radius;
+        positions[pointIndex] = Math.cos(branchAngle + spinAngle) * radius;
         positions[pointIndex+1] = Math.sin(i) * 0.5;
-        positions[pointIndex+2] = Math.sin(branchAngle) * radius;
+        positions[pointIndex+2] = Math.sin(branchAngle + spinAngle) * radius;
     }
 
     galaxyGeometry.addAttribute('position', new BufferAttribute(positions, 3));
