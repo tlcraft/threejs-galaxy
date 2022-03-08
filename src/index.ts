@@ -61,6 +61,7 @@ function startup(): void {
         branches: 3,
         count: 1000,
         radius: 5,
+        randomness: 0.2,
         size: 0.02,
         spin: 1
     }
@@ -79,6 +80,7 @@ function startup(): void {
     debugGui.add(params, 'branches').min(2).max(8).step(1).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'count').min(100).max(100000).step(100).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'radius').min(0.01).max(20).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
+    debugGui.add(params, 'randomness').min(0).max(2).step(0.001).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'size').min(0.01).max(0.8).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'spin').min(-5).max(5).step(0.001).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     configureLightDebug(ambientLight, 'ambient light');
