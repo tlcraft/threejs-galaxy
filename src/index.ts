@@ -60,6 +60,8 @@ function startup(): void {
     const params = {
         branches: 3,
         count: 1000,
+        insideColor: '#000000',
+        outsideColor: '#000000',
         radius: 5,
         randomness: 0.2,
         randomnessPower: 3,
@@ -85,6 +87,10 @@ function startup(): void {
     debugGui.add(params, 'randomnessPower').min(1).max(10).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'size').min(0.01).max(0.8).step(0.01).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
     debugGui.add(params, 'spin').min(-5).max(5).step(0.001).onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
+    
+    debugGui.addColor(params, 'insideColor').onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
+    debugGui.addColor(params, 'outsideColor').onFinishChange(() => { const galaxy = generateGalaxy(params); scene.add(galaxy)});
+
     configureLightDebug(ambientLight, 'ambient light');
     animate();
 }
@@ -218,10 +224,10 @@ function generateGalaxy(parameters: { branches: number, count: number, radius: n
     galaxyGeometry.addAttribute('position', new BufferAttribute(positions, 3));
 
     galaxyMaterial = new PointsMaterial({
-       size: size,
-       sizeAttenuation: true,
-       depthWrite: false,
-       blending: AdditiveBlending
+        blending: AdditiveBlending,
+        depthWrite: false,
+        size: size,
+        sizeAttenuation: true,
    });
 
    galaxyPoints = new Points(galaxyGeometry, galaxyMaterial);
