@@ -23,6 +23,7 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as dat from 'dat.gui';
 import { Cursor } from '~models/cursor';
+import { GalaxyParameters } from '~models/galaxyParameters';
 
 const debugGui = generateDebugGui();
 
@@ -197,7 +198,7 @@ function generateRenderer(): WebGLRenderer {
     return renderer;
 }
 
-function generateGalaxy(parameters: { branches: number, count: number, radius: number, size: number, spin: number, randomness: number, randomnessPower: number }): Points {
+function generateGalaxy(parameters: GalaxyParameters): Points {
     galaxyGeometry.dispose();
     galaxyMaterial.dispose();
     scene.remove(galaxyPoints);
