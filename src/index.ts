@@ -206,6 +206,7 @@ function generateGalaxy(parameters: GalaxyParameters): Points {
     const { branches, count, size, spin, randomnessPower } = parameters;
     galaxyGeometry = new BufferGeometry();
     const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
 
     for(let i = 0; i < count; i++) {
         const pointIndex = i * 3;
@@ -218,17 +219,23 @@ function generateGalaxy(parameters: GalaxyParameters): Points {
         const randomZ = Math.pow(Math.random(), randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
         
         positions[pointIndex] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-        positions[pointIndex+1] = randomY;
-        positions[pointIndex+2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+        positions[pointIndex + 1] = randomY;
+        positions[pointIndex + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+        colors[pointIndex] = 1;
+        colors[pointIndex + 1] = 1;
+        colors[pointIndex + 2] = 0;
     }
 
     galaxyGeometry.addAttribute('position', new BufferAttribute(positions, 3));
+    galaxyGeometry.addAttribute('color', new BufferAttribute(colors, 3));
 
     galaxyMaterial = new PointsMaterial({
         blending: AdditiveBlending,
         depthWrite: false,
         size: size,
         sizeAttenuation: true,
+        vertexColors: true,
    });
 
    galaxyPoints = new Points(galaxyGeometry, galaxyMaterial);
