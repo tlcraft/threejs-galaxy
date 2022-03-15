@@ -227,8 +227,8 @@ function generateGalaxy(parameters: GalaxyParameters): Points {
         colors[pointIndex + 2] = 0;
     }
 
-    galaxyGeometry.addAttribute('position', new BufferAttribute(positions, 3));
-    galaxyGeometry.addAttribute('color', new BufferAttribute(colors, 3));
+    galaxyGeometry.setAttribute('position', new BufferAttribute(positions, 3));
+    galaxyGeometry.setAttribute('color', new BufferAttribute(colors, 3));
 
     galaxyMaterial = new PointsMaterial({
         blending: AdditiveBlending,
