@@ -4,21 +4,13 @@ import {
     AxesHelper,
     BufferAttribute,
     BufferGeometry,
-    Clock,
     Color,
     Light,
-    Material,
-    Mesh,
-    MeshBasicMaterial,
-    MeshLambertMaterial,
     PCFSoftShadowMap,
     PerspectiveCamera,
     Points,
     PointsMaterial,
-    RepeatWrapping,
     Scene,
-    Texture,
-    TextureLoader,
     WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -28,25 +20,14 @@ import { GalaxyParameters } from '~models/galaxyParameters';
 
 const debugGui = generateDebugGui();
 
-const clock = new Clock();
 const cursor: Cursor = { x: 1, y: 1 };
 const scene = generateScene();
 const camera = generatePerspectivCamera();
 const renderer = generateRenderer();
-const textureLoader = new TextureLoader();
 
 let galaxyGeometry: BufferGeometry = new BufferGeometry();
 let galaxyMaterial: PointsMaterial = new PointsMaterial();
 let galaxyPoints: Points = new Points();
-
-function configureTexture(textureImage: string): Texture {
-    const texture = textureLoader.load(textureImage);
-    texture.repeat.set(8, 8);
-    texture.wrapS = RepeatWrapping;
-    texture.wrapT = RepeatWrapping;
-    
-    return texture;
-}
 
 function startup(): void {
     const controls = generateControls();
@@ -76,8 +57,6 @@ function startup(): void {
     const animate = function () {
         requestAnimationFrame(animate);
 
-        const elapsedTime = clock.getElapsedTime();
-
         controls.update();
         renderer.render(scene, camera);
     };
@@ -105,46 +84,6 @@ function generateDebugGui(): dat.GUI {
     debugGui.hide();
 
     return debugGui;
-}
-
-function configureMeshDebug(mesh: Mesh<BufferGeometry, MeshLambertMaterial | MeshBasicMaterial | Material>, name: string): void {
-    const folder = debugGui.addFolder(`${name} section`);
-    folder.add(mesh.position, 'x').min(mesh.position.x-40).max(mesh.position.x+40).step(0.01).name('x-axis');
-    folder.add(mesh.position, 'y').min(mesh.position.y-40).max(mesh.position.y+40).step(0.01).name('y-axis');
-    folder.add(mesh.position, 'z').min(mesh.position.z-40).max(mesh.position.z+40).step(0.01).name('z-axis');
-
-    folder.add(mesh.rotation, 'x').min(0).max(Math.PI * 2).step(0.01).name('x-axis rotation');
-    folder.add(mesh.rotation, 'y').min(0).max(Math.PI * 2).step(0.01).name('y-axis rotation');
-    folder.add(mesh.rotation, 'z').min(0).max(Math.PI * 2).step(0.01).name('z-axis rotation');
-
-    folder.add(mesh, 'visible');
-    folder.add(mesh.material, 'wireframe');
-
-    if(mesh.material.hasOwnProperty('color')) {
-        const parameters = {
-            color: mesh.material.color.getHex()
-        };
-    
-        folder.addColor(parameters, 'color').onChange(() => {
-            mesh.material.color.set(parameters.color);
-        });
-    }
-
-    if(mesh.material.hasOwnProperty('metalness')) {
-        folder.add(mesh.material, 'metalness').min(0).max(1).step(0.001);
-    }
-
-    if(mesh.material.hasOwnProperty('roughness')) {
-        folder.add(mesh.material, 'roughness').min(0).max(1).step(0.001);
-    }
-
-    if(mesh.material.hasOwnProperty('aoMapIntensity')) {
-        folder.add(mesh.material, 'aoMapIntensity').min(0).max(10).step(0.001);
-    }
-        
-    if(mesh.material.hasOwnProperty('displacementScale')) {
-        folder.add(mesh.material, 'displacementScale').min(0).max(1).step(0.001);
-    }
 }
 
 function configureLightDebug(light: Light, name: string): void {
