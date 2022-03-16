@@ -5,6 +5,7 @@ import {
     BufferAttribute,
     BufferGeometry,
     Clock,
+    Color,
     Light,
     Material,
     Mesh,
@@ -61,8 +62,8 @@ function startup(): void {
     const params = {
         branches: 3,
         count: 1000,
-        insideColor: '#000000',
-        outsideColor: '#000000',
+        insideColor: '#ff6633',
+        outsideColor: '#1b3984',
         radius: 5,
         randomness: 0.2,
         randomnessPower: 3,
@@ -207,6 +208,8 @@ function generateGalaxy(parameters: GalaxyParameters): Points {
     galaxyGeometry = new BufferGeometry();
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
+    const colorInside = new Color(parameters.insideColor);
+    const colorOutside = new Color(parameters.outsideColor);
 
     for(let i = 0; i < count; i++) {
         const pointIndex = i * 3;
@@ -222,9 +225,12 @@ function generateGalaxy(parameters: GalaxyParameters): Points {
         positions[pointIndex + 1] = randomY;
         positions[pointIndex + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
-        colors[pointIndex] = 1;
-        colors[pointIndex + 1] = 1;
-        colors[pointIndex + 2] = 0;
+        const mixedColor = colorInside.clone();
+        mixedColor.lerp(colorOutside, Math.random());
+
+        colors[pointIndex] = mixedColor.r;
+        colors[pointIndex + 1] = mixedColor.g;
+        colors[pointIndex + 2] = mixedColor.b;
     }
 
     galaxyGeometry.setAttribute('position', new BufferAttribute(positions, 3));
