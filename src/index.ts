@@ -41,14 +41,14 @@ function startup(): void {
     scene.add(ambientLight);
 
     const params = {
-        branches: 3,
-        count: 1000,
+        branches: 5,
+        count: 2000,
         insideColor: '#ff6633',
         outsideColor: '#1b3984',
         radius: 5,
         randomness: 0.2,
-        randomnessPower: 3,
-        size: 0.02,
+        randomnessPower: 2,
+        size: 0.03,
         spin: 1
     }
     const galaxy = generateGalaxy(params);
