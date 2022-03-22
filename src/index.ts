@@ -45,7 +45,7 @@ function startup(): void {
         count: 2000,
         insideColor: '#ff6633',
         outsideColor: '#1b3984',
-        radius: 5,
+        radius: 10,
         randomnessPower: 2,
         size: 0.03,
         spin: 1
